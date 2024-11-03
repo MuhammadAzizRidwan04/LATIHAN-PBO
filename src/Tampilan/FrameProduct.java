@@ -1,65 +1,99 @@
-
 package Tampilan;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
-import Kelas.User;
+import Kelas.Category;
+import Kelas.Product;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import javax.swing.UIManager;
-
-
 
 /**
  *
  * @author M. Aziz Ridwan
  */
-public class FrameUser extends javax.swing.JFrame {
+public class FrameProduct extends javax.swing.JFrame {
 
     /**
-     * Creates new form FrameUser
+     * Creates new form FrameProduct
      */
-    public FrameUser() {
+    public FrameProduct() {
         initComponents();
-        loadTabel();
+        loadTable();
         reset();
+        comboBox();
     }
 
-    void loadTabel() {
+    void loadTable() {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Username");
-        model.addColumn("Email");
-        model.addColumn("Fullname");
-        model.addColumn("Status");
+        model.addColumn("Product ID");
+        model.addColumn("Name");
+        model.addColumn("Description");
+        model.addColumn("Price");
+        model.addColumn("Category");
 
         try {
-            User us = new User();
-            ResultSet data = us.tampilUser();
+            Product pro = new Product();
+            ResultSet data = pro.tampilProduk();
 
             while (data.next()) {
                 model.addRow(new Object[]{
-                    data.getString("user_name"),
-                    data.getString("user_email"),
-                    data.getString("user_fullname"),
-                    data.getInt("user_status") == 1 ? "Aktif" : "Tidak Aktif"
-                });
+                    data.getString("ID"),
+                    data.getString("Nama"),
+                    data.getString("Deskripsi"),
+                    data.getString("Harga"),
+                    data.getString("Kategori"),});
 
             }
 
         } catch (SQLException sQLException) {
+
         }
 
-        tUser.setModel(model);
-
+        tProduct.setModel(model);
     }
 
     void reset() {
-        tUsername.setText(null);
-        tUsername.setEditable(true);
-        tEmail.setText(null);
-        tPassword.setText(null);
-        tFullname.setText(null);
-        cStatus.setSelectedItem(null);
+        autoID();
+        tProductID.setEditable(true);
+        tProductDesc.setText(null);
+        tProductPrice.setText(null);
+        cCategory.setSelectedItem(null);
+        tProductName.setText(null);
+    }
+
+    void comboBox() {
+
+        try {
+            Category cat = new Category();
+            ResultSet data = cat.tampilComBox();
+
+            while (data.next()) {
+                String isi = data.getString("category_name");
+                cCategory.addItem(isi);
+            }
+
+        } catch (SQLException ex) {
+
+        }
+
+    }
+
+    void autoID() {
+
+        try {
+            Product pro = new Product();
+            ResultSet id = pro.autoID();
+
+            if (id.next()) {
+                int auto = id.getInt("ID") + 1;
+                tProductID.setText(String.valueOf(auto));
+            } else {
+                tProductID.setText("1");
+            }
+
+        } catch (SQLException sQLException) {
+        }
     }
 
     /**
@@ -77,19 +111,20 @@ public class FrameUser extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        tUsername = new javax.swing.JTextField();
+        tProductID = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        tEmail = new javax.swing.JTextField();
+        tProductName = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        tFullname = new javax.swing.JTextField();
-        tPassword = new javax.swing.JPasswordField();
+        tProductPrice = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        cStatus = new javax.swing.JComboBox<>();
+        cCategory = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tProductDesc = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tUser = new javax.swing.JTable();
+        tProduct = new javax.swing.JTable();
         bTambah = new javax.swing.JButton();
         bUbah = new javax.swing.JButton();
         bHapus = new javax.swing.JButton();
@@ -104,14 +139,14 @@ public class FrameUser extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("USER");
+        jLabel1.setText("PRODUCT");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(426, 426, 426)
+                .addGap(363, 363, 363)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -130,39 +165,39 @@ public class FrameUser extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Username");
+        jLabel2.setText("Product ID");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Email");
+        jLabel3.setText("Name");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Password");
+        jLabel4.setText("Description");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Fullname");
+        jLabel5.setText("Price");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Status");
+        jLabel6.setText("Category");
 
-        cStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aktif", "Tidak Aktif", " ", " ", " " }));
+        cCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", " " }));
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 255));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("ENTER USER DATA");
+        jLabel7.setText("ENTER PRODUCT DATA");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(95, 95, 95)
+                .addGap(70, 70, 70)
                 .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -173,6 +208,10 @@ public class FrameUser extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
+
+        tProductDesc.setColumns(20);
+        tProductDesc.setRows(5);
+        jScrollPane2.setViewportView(tProductDesc);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -185,21 +224,21 @@ public class FrameUser extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel4))
-                        .addGap(63, 63, 63)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cStatus, 0, 303, Short.MAX_VALUE)
-                            .addComponent(tFullname)
-                            .addComponent(tPassword)))
-                    .addComponent(jLabel5)
+                        .addComponent(tProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(tProductID, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4))
+                        .addGap(42, 42, 42)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cCategory, 0, 303, Short.MAX_VALUE)
+                            .addComponent(tProductPrice)
+                            .addComponent(jScrollPane2))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -209,32 +248,33 @@ public class FrameUser extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tProductID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(17, 17, 17)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(28, 28, 28))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(tFullname)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tProductPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addGap(78, 78, 78))
+                .addGap(20, 20, 20))
         );
 
-        tUser.setForeground(new java.awt.Color(0, 0, 255));
-        tUser.setModel(new javax.swing.table.DefaultTableModel(
+        tProduct.setForeground(new java.awt.Color(0, 0, 255));
+        tProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -245,12 +285,12 @@ public class FrameUser extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tUser.addMouseListener(new java.awt.event.MouseAdapter() {
+        tProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tUserMouseClicked(evt);
+                tProductMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tUser);
+        jScrollPane1.setViewportView(tProduct);
 
         bTambah.setBackground(new java.awt.Color(204, 204, 0));
         bTambah.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -309,23 +349,23 @@ public class FrameUser extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(bKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bTambah, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                            .addComponent(bUbah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bKembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane1))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(bHapus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addComponent(bTambah, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bUbah, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bKembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -333,21 +373,27 @@ public class FrameUser extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(509, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(31, 31, 31)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         getContentPane().add(jPanel1, "card2");
@@ -356,71 +402,83 @@ public class FrameUser extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tProductMouseClicked
+        int baris = tProduct.rowAtPoint(evt.getPoint());
+        String ID = tProduct.getValueAt(baris, 0).toString();
+        String Nama = tProduct.getValueAt(baris, 1).toString();
+        String Desc = tProduct.getValueAt(baris, 2).toString();
+        String Harga = tProduct.getValueAt(baris, 3).toString();
+        String Kategori = tProduct.getValueAt(baris, 4).toString();
+
+        tProductID.setText(ID);
+        tProductID.setEditable(false);
+        tProductName.setText(Nama);
+        tProductPrice.setText(Harga);
+        tProductDesc.setText(Desc);
+        cCategory.setSelectedItem(Kategori);
+    }//GEN-LAST:event_tProductMouseClicked
+
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
         try {
-            User user = new User();
-            user.setUser_name(tUsername.getText());
-            user.setUser_email(tEmail.getText());
-            user.setUser_password(tPassword.getText());
-            user.setUser_fullname(tFullname.getText());
-            if (cStatus.getSelectedItem().equals("Aktif")) {
-                user.setUser_status(1);
-            } else {
-                user.setUser_status(0);
+            Product pro = new Product();
+            Category cat = new Category();
+            pro.setProduct_id(Integer.parseInt(tProductID.getText()));
+            pro.setProduct_name(tProductName.getText());
+            pro.setProduct_desc(tProductDesc.getText());
+            pro.setProduct_price(Integer.parseInt(tProductPrice.getText()));
+            cat.setCategory_name(cCategory.getSelectedItem().toString());
+            ResultSet data = cat.Konversi();
+
+            if (data.next()) {
+                String isi = data.getString("category_id");
+                pro.setProduct_cat_id(Integer.parseInt(isi));
             }
-            user.tambahUser();
+            pro.tambahProduk();
         } catch (SQLException sQLException) {
+            System.out.println("data tidak masuk");
         }
-        loadTabel();
-    }//GEN-LAST:event_bTambahActionPerformed
-
-    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
-        try {
-            User usr = new User();
-            usr.setUser_name(tUsername.getText());
-            usr.hapusUser();
-        } catch (SQLException sQLException) {
-        }
-        loadTabel();
+        loadTable();
         reset();
-    }//GEN-LAST:event_bHapusActionPerformed
-
-    private void tUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tUserMouseClicked
-        int baris = tUser.rowAtPoint(evt.getPoint());
-        String userName = tUser.getValueAt(baris, 0).toString();
-        String email = tUser.getValueAt(baris, 1).toString();
-        String fullName = tUser.getValueAt(baris, 2).toString();
-        String status = tUser.getValueAt(baris, 3).toString();
-
-        tUsername.setText(userName);
-        tUsername.setEditable(false);
-        tEmail.setText(email);
-        tFullname.setText(fullName);
-        cStatus.setSelectedItem(status);
-    }//GEN-LAST:event_tUserMouseClicked
+    }//GEN-LAST:event_bTambahActionPerformed
 
     private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
         try {
-            User usr = new User();
-            usr.setUser_name(tUsername.getText());
-            usr.setUser_email(tEmail.getText());
-            usr.setUser_password(tPassword.getText());
-            usr.setUser_fullname(tFullname.getText());
-             if (cStatus.getSelectedItem().equals("Aktif")) {
-                usr.setUser_status(1);
-            } else {
-                usr.setUser_status(0);
+            Product pro = new Product();
+            Category cat = new Category();
+            pro.setProduct_id(Integer.parseInt(tProductID.getText()));
+            pro.setProduct_name(tProductName.getText());
+            pro.setProduct_desc(tProductDesc.getText());
+            pro.setProduct_price(Integer.parseInt(tProductPrice.getText()));
+            cat.setCategory_name(cCategory.getSelectedItem().toString());
+            ResultSet data = cat.Konversi();
+
+            if (data.next()) {
+                String isi = data.getString("category_id");
+                pro.setProduct_cat_id(Integer.parseInt(isi));
             }
-            usr.ubahUser();
+            pro.ubahProduk();
         } catch (SQLException sQLException) {
+            System.out.println("data tidak masuk");
         }
-        loadTabel();
+        loadTable();
         reset();
     }//GEN-LAST:event_bUbahActionPerformed
 
+    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
+        try {
+            Product pro = new Product();
+            pro.setProduct_id(Integer.parseInt(tProductID.getText()));
+            pro.hapusProduk();
+        } catch (SQLException sQLException) {
+        }
+
+        reset();
+        loadTable();
+    }//GEN-LAST:event_bHapusActionPerformed
+
     private void bKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bKembaliActionPerformed
-        new MainFrame().setVisible(true);
-        dispose();
+       new MainFrame().setVisible(true);
+       dispose();
     }//GEN-LAST:event_bKembaliActionPerformed
 
     /**
@@ -439,7 +497,7 @@ public class FrameUser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrameUser().setVisible(true);
+                new FrameProduct().setVisible(true);
             }
         });
     }
@@ -449,7 +507,7 @@ public class FrameUser extends javax.swing.JFrame {
     private javax.swing.JButton bKembali;
     private javax.swing.JButton bTambah;
     private javax.swing.JButton bUbah;
-    private javax.swing.JComboBox<String> cStatus;
+    private javax.swing.JComboBox<String> cCategory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -463,10 +521,11 @@ public class FrameUser extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField tEmail;
-    private javax.swing.JTextField tFullname;
-    private javax.swing.JPasswordField tPassword;
-    private javax.swing.JTable tUser;
-    private javax.swing.JTextField tUsername;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tProduct;
+    private javax.swing.JTextArea tProductDesc;
+    private javax.swing.JTextField tProductID;
+    private javax.swing.JTextField tProductName;
+    private javax.swing.JTextField tProductPrice;
     // End of variables declaration//GEN-END:variables
 }

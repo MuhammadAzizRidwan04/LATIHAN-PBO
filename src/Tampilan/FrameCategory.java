@@ -1,66 +1,76 @@
-
 package Tampilan;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
+import Kelas.Category;
 import Kelas.User;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import javax.swing.UIManager;
-
-
 
 /**
  *
  * @author M. Aziz Ridwan
  */
-public class FrameUser extends javax.swing.JFrame {
+public class FrameCategory extends javax.swing.JFrame {
 
     /**
-     * Creates new form FrameUser
+     * Creates new form FrameCategory
      */
-    public FrameUser() {
+    public FrameCategory() {
         initComponents();
-        loadTabel();
+        loadTable();
         reset();
     }
 
-    void loadTabel() {
+    void loadTable(){
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Username");
-        model.addColumn("Email");
-        model.addColumn("Fullname");
-        model.addColumn("Status");
-
+        model.addColumn("Category ID");
+        model.addColumn("Name");
+        
         try {
-            User us = new User();
-            ResultSet data = us.tampilUser();
-
-            while (data.next()) {
+            Category cat = new Category();
+            ResultSet data = cat.tampilKategori();
+            
+            while(data.next()){
                 model.addRow(new Object[]{
-                    data.getString("user_name"),
-                    data.getString("user_email"),
-                    data.getString("user_fullname"),
-                    data.getInt("user_status") == 1 ? "Aktif" : "Tidak Aktif"
+                data.getString("category_id"),
+                data.getString("category_name"),
                 });
-
+                
             }
-
+            
         } catch (SQLException sQLException) {
+            
         }
-
-        tUser.setModel(model);
-
+        
+        tCategory.setModel(model);
+    }
+    
+    void reset(){
+        autoID();
+        tIDCategory.setEditable(false);
+        tNamaCategory.setText(null);
+    }
+    
+    void autoID(){
+        
+        try {
+            Category cat = new Category();
+            ResultSet id = cat.autoID();
+            
+            if(id.next()){
+                int auto = id.getInt("ID") + 1;
+                tIDCategory.setText(String.valueOf(auto));
+            } else {
+                tIDCategory.setText("1");
+            }
+            
+            
+        } catch (SQLException sQLException) {
+        }        
     }
 
-    void reset() {
-        tUsername.setText(null);
-        tUsername.setEditable(true);
-        tEmail.setText(null);
-        tPassword.setText(null);
-        tFullname.setText(null);
-        cStatus.setSelectedItem(null);
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -77,23 +87,17 @@ public class FrameUser extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        tUsername = new javax.swing.JTextField();
+        tIDCategory = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        tEmail = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        tFullname = new javax.swing.JTextField();
-        tPassword = new javax.swing.JPasswordField();
-        jLabel6 = new javax.swing.JLabel();
-        cStatus = new javax.swing.JComboBox<>();
+        tNamaCategory = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tUser = new javax.swing.JTable();
         bTambah = new javax.swing.JButton();
         bUbah = new javax.swing.JButton();
         bHapus = new javax.swing.JButton();
         bKembali = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tCategory = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -104,16 +108,16 @@ public class FrameUser extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("USER");
+        jLabel1.setText("CATEGORY");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(426, 426, 426)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(363, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(352, 352, 352))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,41 +134,27 @@ public class FrameUser extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Username");
+        jLabel2.setText("Category ID");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Email");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Password");
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Fullname");
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Status");
-
-        cStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aktif", "Tidak Aktif", " ", " ", " " }));
+        jLabel3.setText("Category Name");
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 255));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("ENTER USER DATA");
+        jLabel7.setText("ENTER CATEGORY DATA");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(95, 95, 95)
+                .addGap(68, 68, 68)
                 .addComponent(jLabel7)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,24 +172,14 @@ public class FrameUser extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel4))
-                        .addGap(63, 63, 63)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cStatus, 0, 303, Short.MAX_VALUE)
-                            .addComponent(tFullname)
-                            .addComponent(tPassword)))
-                    .addComponent(jLabel5)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tIDCategory, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                            .addComponent(tNamaCategory))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -209,48 +189,14 @@ public class FrameUser extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tIDCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tNamaCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(17, 17, 17)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(28, 28, 28))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(tFullname)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(78, 78, 78))
+                .addGap(243, 243, 243))
         );
-
-        tUser.setForeground(new java.awt.Color(0, 0, 255));
-        tUser.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tUser.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tUserMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tUser);
 
         bTambah.setBackground(new java.awt.Color(204, 204, 0));
         bTambah.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -292,6 +238,24 @@ public class FrameUser extends javax.swing.JFrame {
             }
         });
 
+        tCategory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tCategory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tCategoryMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tCategory);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -302,31 +266,33 @@ public class FrameUser extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(bTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(bUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
+                        .addGap(18, 18, 18)
                         .addComponent(bHapus)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(bKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bTambah, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                            .addComponent(bUbah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bTambah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(bUbah, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
                             .addComponent(bHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bKembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
+                            .addComponent(bKembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -345,7 +311,7 @@ public class FrameUser extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -358,65 +324,54 @@ public class FrameUser extends javax.swing.JFrame {
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
         try {
-            User user = new User();
-            user.setUser_name(tUsername.getText());
-            user.setUser_email(tEmail.getText());
-            user.setUser_password(tPassword.getText());
-            user.setUser_fullname(tFullname.getText());
-            if (cStatus.getSelectedItem().equals("Aktif")) {
-                user.setUser_status(1);
-            } else {
-                user.setUser_status(0);
-            }
-            user.tambahUser();
-        } catch (SQLException sQLException) {
-        }
-        loadTabel();
-    }//GEN-LAST:event_bTambahActionPerformed
+            Category cat = new Category();
+            cat.setCategory_id(Integer.parseInt(tIDCategory.getText()));
+            cat.setCategory_name(tNamaCategory.getText());
 
-    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
-        try {
-            User usr = new User();
-            usr.setUser_name(tUsername.getText());
-            usr.hapusUser();
+            cat.tambahKategori();
         } catch (SQLException sQLException) {
         }
-        loadTabel();
+
+        loadTable();
         reset();
-    }//GEN-LAST:event_bHapusActionPerformed
-
-    private void tUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tUserMouseClicked
-        int baris = tUser.rowAtPoint(evt.getPoint());
-        String userName = tUser.getValueAt(baris, 0).toString();
-        String email = tUser.getValueAt(baris, 1).toString();
-        String fullName = tUser.getValueAt(baris, 2).toString();
-        String status = tUser.getValueAt(baris, 3).toString();
-
-        tUsername.setText(userName);
-        tUsername.setEditable(false);
-        tEmail.setText(email);
-        tFullname.setText(fullName);
-        cStatus.setSelectedItem(status);
-    }//GEN-LAST:event_tUserMouseClicked
+    }//GEN-LAST:event_bTambahActionPerformed
 
     private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
         try {
-            User usr = new User();
-            usr.setUser_name(tUsername.getText());
-            usr.setUser_email(tEmail.getText());
-            usr.setUser_password(tPassword.getText());
-            usr.setUser_fullname(tFullname.getText());
-             if (cStatus.getSelectedItem().equals("Aktif")) {
-                usr.setUser_status(1);
-            } else {
-                usr.setUser_status(0);
-            }
-            usr.ubahUser();
+            Category cat = new Category();
+            cat.setCategory_id(Integer.parseInt(tIDCategory.getText()));
+            cat.setCategory_name(tNamaCategory.getText());
+            cat.ubahKategori();
         } catch (SQLException sQLException) {
         }
-        loadTabel();
+
         reset();
+        loadTable();
     }//GEN-LAST:event_bUbahActionPerformed
+
+    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
+        try {
+            Category cat = new Category();
+            cat.setCategory_id(Integer.parseInt(tIDCategory.getText()));
+            cat.hapusKategori();
+        } catch (SQLException sQLException) {
+        }
+
+        reset();
+        loadTable();
+    }//GEN-LAST:event_bHapusActionPerformed
+
+    private void tCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tCategoryMouseClicked
+        int baris = tCategory.rowAtPoint(evt.getPoint());
+        String username = tCategory.getValueAt(baris, 0).toString();
+        String nama = tCategory.getValueAt(baris, 1).toString();
+
+        tIDCategory.setText(username);
+        tIDCategory.setEditable(false);
+        tIDCategory.setVisible(true);
+        tIDCategory.setVisible(true);
+        tNamaCategory.setText(nama);  
+    }//GEN-LAST:event_tCategoryMouseClicked
 
     private void bKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bKembaliActionPerformed
         new MainFrame().setVisible(true);
@@ -439,7 +394,7 @@ public class FrameUser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrameUser().setVisible(true);
+                new FrameCategory().setVisible(true);
             }
         });
     }
@@ -449,24 +404,18 @@ public class FrameUser extends javax.swing.JFrame {
     private javax.swing.JButton bKembali;
     private javax.swing.JButton bTambah;
     private javax.swing.JButton bUbah;
-    private javax.swing.JComboBox<String> cStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField tEmail;
-    private javax.swing.JTextField tFullname;
-    private javax.swing.JPasswordField tPassword;
-    private javax.swing.JTable tUser;
-    private javax.swing.JTextField tUsername;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tCategory;
+    private javax.swing.JTextField tIDCategory;
+    private javax.swing.JTextField tNamaCategory;
     // End of variables declaration//GEN-END:variables
 }
