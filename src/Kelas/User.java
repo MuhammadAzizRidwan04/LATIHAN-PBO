@@ -166,5 +166,37 @@ public class User {
         }
 
     }
+    public void login() {
+        query = "SELECT * FROM user WHERE user_name = ? AND user_password = MD5(?)";
+        try {
+
+            ps = konek.prepareStatement(query);
+
+            ps.setString(1, user_name);
+            ps.setString(2, user_password);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Session.setStatus("Aktif");
+                Session.setNama(rs.getString("user_fullname"));
+                Session.setEmail(rs.getString("user_email"));
+                Session.setUserName(rs.getString("user_name"));
+            } else {
+                Session.setStatus("Tidak Aktif");
+                JOptionPane.showMessageDialog(null, "UserName/Password Anda Salah");
+            }
+
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Login Gagal");
+        }
+    }
+
+    public void logOut() {
+        Session.setStatus("");
+        Session.setEmail("");
+        Session.setNama("");
+        Session.setUserName("");
+    }
 
 }
